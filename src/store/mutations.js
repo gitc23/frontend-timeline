@@ -19,6 +19,9 @@ export default {
   [types.SET_LOCATION_HISTORY](state, locationHistory) {
     state.locationHistory = locationHistory;
   },
+  [types.SET_STAY_POINTS](state, stayPoints) {
+    state.stayPoints = stayPoints;
+  },
   [types.SET_SELECTED_USER](state, selectedUser) {
     state.selectedUser = selectedUser;
   },

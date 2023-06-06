@@ -2,7 +2,8 @@
   <div id="app">
     <AppHeader />
     <main>
-      <router-view />
+      <router-view name="map" />
+      <router-view name="timeline" v-if="showTimeline" />
     </main>
     <DownloadModal />
     <InformationModal />
@@ -25,7 +26,12 @@ import InformationModal from "@/components/modals/InformationModal";
 import LoadingModal from "@/components/modals/LoadingModal";
 
 export default {
-  components: { AppHeader, DownloadModal, InformationModal, LoadingModal },
+  components: {
+    AppHeader,
+    DownloadModal,
+    InformationModal,
+    LoadingModal,
+  },
   created() {
     document.documentElement.style.setProperty(
       "--color-primary",
@@ -57,6 +63,14 @@ export default {
     });
     // Initially update URL query params from state
     this.updateUrlQuery();
+  },
+  data() {
+    return {
+      showTimeline: false,
+    };
+  },
+  mounted() {
+    this.$root.$on("toggle-timeline", this.toggleTimeline);
   },
   methods: {
     ...mapActions(["populateStateFromQuery", "loadData"]),
@@ -91,6 +105,9 @@ export default {
         JSON.parse(JSON.stringify({ map, start, end, user, device }))
       );
       this.$router.replace({ query }).catch(() => {}); // https://github.com/vuejs/vue-router/issues/2872#issuecomment-519073998
+    },
+    toggleTimeline() {
+      this.showTimeline = !this.showTimeline;
     },
   },
 };

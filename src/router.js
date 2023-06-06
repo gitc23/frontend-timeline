@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import config from "@/config";
 import Map from "@/views/Map.vue";
+import TimelineView from "@/views/TimelineView.vue";
 
 Vue.use(Router);
 
@@ -12,7 +13,10 @@ export default new Router({
     {
       path: "/",
       name: "map",
-      component: Map,
+      components: {
+        map: Map,
+        timeline: TimelineView,
+      },
     },
   ],
 });

@@ -65,6 +65,32 @@ export const distanceBetweenCoordinates = (c1, c2) => {
 };
 
 /**
+ * Computer an average coordinate from a list of coordinates
+ *
+ * @param {Array} gpsPoints such as location history
+ * @returns {Array} coordinate pair lat/lon
+ */
+export const computeMeanCoord = (gpsPoints) => {
+  let lon = 0.0;
+  let lat = 0.0;
+  let acc = 0.0;
+  const pointNum = gpsPoints.length;
+
+  for (let i = 0; i < pointNum; i++) {
+    const point = gpsPoints[i];
+    lon += point.lon;
+    lat += point.lat;
+    acc += point.acc;
+  }
+
+  return {
+    lon: lon / pointNum,
+    lat: lat / pointNum,
+    acc: acc / pointNum,
+  };
+};
+
+/**
  * Let the user download a string as file.
  *
  * @param {String} text Content of the file

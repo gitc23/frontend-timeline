@@ -117,6 +117,15 @@
           </option>
         </select>
       </div>
+      <div class="nav-item">
+        <button
+          class="button button-outline"
+          :title="$t('Toggle the timeline view')"
+          @click="$root.$emit('toggle-timeline')"
+        >
+          {{ $t("Timeline") }}
+        </button>
+      </div>
     </nav>
     <nav class="header-item header-item-right">
       <div
@@ -219,6 +228,7 @@ export default {
         { layer: "line", label: this.$t("Show location history (line)") },
         { layer: "points", label: this.$t("Show location history (points)") },
         { layer: "heatmap", label: this.$t("Show location heatmap") },
+        { layer: "stayPoints", label: this.$t("Show stay points") },
       ],
       showMobileNav: false,
     };

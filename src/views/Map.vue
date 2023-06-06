@@ -101,6 +101,20 @@
       </template>
     </template>
 
+    <template v-if="map.layers.stayPoints">
+      console.log("here");
+      <LMarker
+        v-for="(sp, index) in stayPoints"
+        :key="`stayPoint-${index}`"
+        :lat-lng="[sp.latitude, sp.longitude]"
+        :icon="markerIcon"
+      >
+        <!-- Customize the popup content for stayPoints -->
+        <!-- <LPopup>{{ sp.startTimeReadable }} - 
+          {{ sp.endTimeReadable }}</LPopup> -->
+      </LMarker>
+    </template>
+
     <template v-if="map.layers.heatmap">
       <LHeatmap
         v-if="filteredLocationHistoryLatLngs.length"
@@ -186,7 +200,7 @@ export default {
       "filteredLocationHistoryLatLngs",
       "filteredLocationHistoryLatLngGroups",
     ]),
-    ...mapState(["lastLocations", "map"]),
+    ...mapState(["lastLocations", "map", "stayPoints"]),
   },
   methods: {
     ...mapMutations({

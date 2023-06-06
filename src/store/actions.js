@@ -210,10 +210,10 @@ const getLocationHistory = async ({ commit, state }) => {
   }
 };
 
-/** 
+/**
  * Extract stay points from trajectory
  * adapted from https://gist.github.com/RustingSword/5963008
-*/
+ */
 const getStayPoints = ({ commit }, { gpsPoints, distThres, timeThres }) => {
   Object.keys(gpsPoints).forEach((user) => {
     Object.keys(gpsPoints[user]).forEach((device) => {

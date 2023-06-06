@@ -6,6 +6,7 @@ import {
   distanceBetweenCoordinates,
   isIsoDateTime,
   getLocationHistoryCount,
+  computeMeanCoord,
 } from "@/util";
 
 /**
@@ -209,6 +210,65 @@ const getLocationHistory = async ({ commit, state }) => {
   }
 };
 
+/** 
+ * Extract stay points from trajectory
+ * adapted from https://gist.github.com/RustingSword/5963008
+*/
+const getStayPoints = ({ commit }, { gpsPoints, distThres, timeThres }) => {
+  Object.keys(gpsPoints).forEach((user) => {
+    Object.keys(gpsPoints[user]).forEach((device) => {
+      const sPoints = [];
+      const pointNum = gpsPoints[user][device].length;
+      let i = 0;
+
+      while (i < pointNum) {
+        let j = i + 1;
+        while (j < pointNum) {
+          const pointi = gpsPoints[user][device][i];
+          const pointj = gpsPoints[user][device][j];
+
+          // calculate distance between current and next point
+          const dist = distanceBetweenCoordinates(
+            L.latLng(pointi.lat, pointi.lon),
+            L.latLng(pointj.lat, pointj.lon)
+          );
+          if (dist > distThres) {
+            // calculate time difference between points
+            const timeDiff = pointj.tst - pointi.tst;
+
+            if (timeDiff > timeThres) {
+              // calculate mean coordinate for all points at stay point
+              const meanCoord = computeMeanCoord(
+                gpsPoints[user][device].slice(i, j + 1)
+              );
+              // create the stay point
+              const sp = {
+                latitude: meanCoord.lat,
+                longitude: meanCoord.lon,
+                accuracy: meanCoord.acc,
+                startTimeReadable: pointi.disptst,
+                endTimeReadable: pointj.disptst,
+                startTime: pointi.tst,
+                endTime: pointj.tst,
+                duration: pointj.tst - pointi.tst,
+              };
+              sPoints.push(sp);
+            }
+            break;
+          }
+          j++;
+        }
+        i = j;
+      }
+      const stayPointsWithIds = sPoints.map((sPoint, index) => ({
+        ...sPoint,
+        id: index + 1,
+      }));
+      commit(types.SET_STAY_POINTS, stayPointsWithIds);
+    });
+  });
+};
+
 /**
  * Load the OwnTracks recorder version.
  */
@@ -266,6 +326,7 @@ export default {
   getDevices,
   getLastLocations,
   getLocationHistory,
+  getStayPoints,
   getRecorderVersion,
   setSelectedUser,
   setSelectedDevice,

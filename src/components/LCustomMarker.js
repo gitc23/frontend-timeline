@@ -17,3 +17,8 @@ export default L.divIcon({
   className: "",
   html: `<span class="pin">${svg}</span>`,
 });
+
+export const LCustomMarkerSelected = L.divIcon({
+  className: "",
+  html: `<span class="pin selected">${svg}</span>`,
+});

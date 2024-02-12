@@ -1,5 +1,9 @@
 <template>
-  <li class="timeline-item">
+  <li
+    class="timeline-item"
+    :class="{ selected: selectedStayPointId === stayPoint.id }"
+    @click="setSelectedStayPointId(stayPoint.id)"
+  >
     <div class="timeline-time">
       <div class="timeline-start-time">
         {{ formatTime(stayPoint.startTimeReadable) }}
@@ -22,6 +26,8 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 export default {
   props: {
     stayPoint: {
@@ -29,7 +35,11 @@ export default {
       required: true,
     },
   },
+  computed: {
+    ...mapState(["selectedStayPointId"]),
+  },
   methods: {
+    ...mapActions(["setSelectedStayPointId"]),
     handleTitleInput(event) {
       const newTitle = event.target.textContent;
       // Update the stayPoint title in the Vuex store or
@@ -81,6 +91,10 @@ export default {
   height: 20px;
   width: 20px;
   transition: all 100ms ease-in;
+}
+
+.timeline-view ul.timeline-content li.selected::before {
+  background: var(--color-selected);
 }
 
 .timeline-view ul.timeline-content li:hover::before {

@@ -84,6 +84,13 @@
           fill: var(--color-primary);
         }
       }
+      &.selected {
+        svg {
+          path {
+            fill: var(--color-selected);
+          }
+        }
+      }
     }
   }
 }

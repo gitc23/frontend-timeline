@@ -19,6 +19,9 @@ export default {
   [types.SET_LOCATION_HISTORY](state, locationHistory) {
     state.locationHistory = locationHistory;
   },
+  [types.SET_SELECTED_STAY_POINT_ID](state, selectedStayPointId) {
+    state.selectedStayPointId = selectedStayPointId;
+  },
   [types.SET_STAY_POINTS](state, stayPoints) {
     state.stayPoints = stayPoints;
   },

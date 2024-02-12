@@ -277,6 +277,13 @@ const getRecorderVersion = async ({ commit }) => {
 };
 
 /**
+ * Set the selected stay point.
+ */
+const setSelectedStayPointId = ({ commit }, stayPointId) => {
+  commit(types.SET_SELECTED_STAY_POINT_ID, stayPointId);
+};
+
+/**
  * Set the selected user and reload the location history.
  *
  * @param {User} user Name of the new selected user
@@ -328,6 +335,7 @@ export default {
   getLocationHistory,
   getStayPoints,
   getRecorderVersion,
+  setSelectedStayPointId,
   setSelectedUser,
   setSelectedDevice,
   setStartDateTime,

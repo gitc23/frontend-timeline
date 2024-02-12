@@ -18,6 +18,7 @@ export default new Vuex.Store({
     lastLocations: [],
     locationHistory: {},
     stayPoints: [],
+    selectedStayPointId: null,
     selectedUser: config.selectedUser,
     selectedDevice: config.selectedUser !== null ? config.selectedDevice : null,
     // Convert to UTC and get rid of milliseconds

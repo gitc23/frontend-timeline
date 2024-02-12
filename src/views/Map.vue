@@ -107,10 +107,11 @@
         v-for="(sp, index) in stayPoints"
         :key="`stayPoint-${index}`"
         :lat-lng="[sp.latitude, sp.longitude]"
-        :icon="markerIcon"
+        :icon="markerIconDynamic(sp)"
+        @click="setSelectedStayPointId(sp.id)"
       >
         <!-- Customize the popup content for stayPoints -->
-        <!-- <LPopup>{{ sp.startTimeReadable }} - 
+        <!-- <LPopup>{{ sp.startTimeReadable }} -
           {{ sp.endTimeReadable }}</LPopup> -->
       </LMarker>
     </template>
@@ -129,7 +130,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapMutations } from "vuex";
+import { mapGetters, mapState, mapMutations, mapActions } from "vuex";
 import L from "leaflet";
 import {
   LMap,
@@ -143,7 +144,9 @@ import {
 } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
 import * as types from "@/store/mutation-types";
-import LCustomMarker from "@/components/LCustomMarker";
+import LCustomMarker, {
+  LCustomMarkerSelected,
+} from "@/components/LCustomMarker";
 import LHeatmap from "@/components/LHeatmap";
 import LDeviceLocationPopup from "@/components/LDeviceLocationPopup";
 
@@ -167,6 +170,7 @@ export default {
       controls: this.$config.map.controls,
       heatmap: this.$config.map.heatmap,
       markerIcon: LCustomMarker,
+      markerIconSelected: LCustomMarkerSelected,
       maxZoom: this.$config.map.maxZoom,
       maxNativeZoom: this.$config.map.maxNativeZoom,
       tileSize: this.$config.map.tileSize,
@@ -200,13 +204,19 @@ export default {
       "filteredLocationHistoryLatLngs",
       "filteredLocationHistoryLatLngGroups",
     ]),
-    ...mapState(["lastLocations", "map", "stayPoints"]),
+    ...mapState(["lastLocations", "map", "stayPoints", "selectedStayPointId"]),
   },
   methods: {
+    markerIconDynamic(sp) {
+      return sp.id === this.selectedStayPointId
+        ? LCustomMarkerSelected
+        : LCustomMarker;
+    },
     ...mapMutations({
       setMapCenter: types.SET_MAP_CENTER,
       setMapZoom: types.SET_MAP_ZOOM,
     }),
+    ...mapActions(["setSelectedStayPointId"]),
     /**
      * Fit all objects on the map into view.
      */
